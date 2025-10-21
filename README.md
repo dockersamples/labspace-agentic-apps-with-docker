@@ -1,48 +1,39 @@
-# Labspace starter
+# Labspace - Building Agentic Apps with Docker
 
-This repository is intended to server as a template to help bootstrap a new Labspace.
+Get up and going with building agentic applications with Compose, Docker Model Runner, and the Docker MCP Gateway.
 
-## Instructions
+## Learning objectives
 
-1. Create a new repository using this repo as the template ([docs here](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template)).
+This Labspace will teach you the following:
 
-    **NOTE:** After creating the repo, a GHA workflow will run to do some additional bootstrapping. The bootstrapping workflow file will be removed during bootstrapping.
+1. 🧠 Models
+    - What are models? How do we interact with them?
+    - What is the [Docker Model Runner](https://docs.docker.com/ai/model-runner/)?
+    - How do I configure the Docker Model Runner in Compose?
+    - How do I write code that connects to the Docker Model Runner?
+2. 🛠️ Tools
+    - What are tools? How do they work?
+    - How does [MCP (Model Context Protocol)](https://modelcontextprotocol.io) fit in?
+    - What is the [Docker MCP Gateway](https://docs.docker.com/ai/mcp-gateway/)?
+    - How do I start a MCP Gateway?
+    - How do I connect to the MCP Gateway in code?
+3. 🧑‍💻 Code
+    - What are agentic frameworks?
+    - How do I define the models and tools my app needs in a Compose file?
+    - How do I configure my app to use those models and tools?
 
-2. Clone your newly created repo to your local machine
+## Launch the Labspace
 
-3. Start the local development mode:
+To launch the Labspace, run the following command:
 
-    ```bash
-    # On Mac/Linux
-    CONTENT_PATH=$PWD docker compose -f oci://dockersamples/labspace-content-dev -f .labspace/compose.override.yaml up
+```bash
+docker compose -f oci://dockersamples/labspace-agentic-apps-with-docker up -d
+```
 
-    # On Windows with PowerShell
-    $Env:CONTENT_PATH = (Get-Location).Path; docker compose -f oci://dockersamples/labspace-content-dev -f .labspace/compose.override.yaml up
-    ```
+Note that it may take a little while to start due to the AI model used by the Labspace.
 
-4. Update the `labspace.yaml` with your Labspace's title and description
+And then open your browser to http://localhost:3030.
 
-5. Write your Labspace! Being in dev mode, your changes should be visible in the interface without a restart. Feel free to edit either on your host machine or in the Labspace itself!
+### Using the Docker Desktop extension
 
-    Add any supporting application files or resources directly into the Labspace. This repo will be cloned into the Labspace at startup.
-
-    Be sure to check out the [docs](https://github.com/dockersamples/labspace-infra/tree/main/docs) for additional information and guidelines.
-
-
-
-### Setting up the deployment pipeline
-
-The template repo contains a workflow file to make it easy to publish your Labspace.
-
-1. Add GitHub Action Secrets in your new repo for the following:
-
-    - `DOCKERHUB_USERNAME` - the username to authenticate to Docker Hub with
-    - `DOCKERHUB_TOKEN` - a personal or organization access token to use for authentication
-
-2. In the `.github/workflows/publish-labspace.yaml.temp` file, update the `DOCKERHUB_REPO` with the name of the Docker Hub repo you want to publish to.
-
-3. Rename the workflow file to remove the `.temp` extension.
-
-    ```bash
-    mv .github/workflows/publish-labspace.yaml.temp .github/workflows/publish-labspace.yaml
-    ```
+If you have the Labspace extension installed (`docker extension install dockersamples/labspace-extension` if not), you can also [click this link](https://open.docker.com/dashboard/extension-tab?extensionId=dockersamples/labspace-extension&location=dockersamples/labspace-agentic-apps-with-docker&title=Building%20agentic%20apps%20with%20Docker) to launch the Labspace.

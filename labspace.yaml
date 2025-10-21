@@ -1,6 +1,6 @@
-title: Agentic Compose
+title: Building Agentic Apps with Docker
 description: |
-  Get up and going with building agentic applications with Compose.
+  Get up and going with building agentic applications with Compose, Docker Model Runner, and the Docker MCP Gateway.
 
 sections:
   - title: Introduction

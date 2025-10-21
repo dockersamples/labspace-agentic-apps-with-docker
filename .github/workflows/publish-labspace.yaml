@@ -1,7 +1,7 @@
 name: Package and deploy Labspace
 
 env:
-  DOCKERHUB_REPO: your-dockerhub-username/labspace-name
+  DOCKERHUB_REPO: dockersamples/labspace-agentic-apps-with-docker
 
 on:
   push:
