@@ -76,7 +76,7 @@ The first thing you'll do is create a Compose file that defines the model and MC
     ```yaml
     models:
       gemma3:
-        model: ai/gemma3-qat
+        model: ai/gemma3:4B-Q4_K_M
 
     services:
       mcp-gateway:
