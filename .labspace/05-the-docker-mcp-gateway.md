@@ -208,6 +208,10 @@ Now that you have a MCP Gateway up and running, you are ready to connect to it, 
 
 7. If you run the app again, you'll now see a container start up using the `mcp/duckduckgo` image (started by the MCP Gateway) and you'll see output similar to the following:
 
+    ```console terminal-id=02-tools
+    node ./index.js
+    ```
+    
     ```plaintext no-copy-button
     The first 100 characters of the Docker homepage are: Docker: Accelerated Container Application Development NEW Webinar series – Secure your software supp...
     ```

@@ -8,4 +8,7 @@ export const mastra = new Mastra({
     name: 'Mastra',
     level: 'info',
   }),
+  server: {
+    host: '0.0.0.0'
+  },
 });
