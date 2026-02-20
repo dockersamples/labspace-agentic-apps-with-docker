@@ -9,16 +9,26 @@ description: |
 
 sections:
   - title: Introduction
-    contentPath: .labspace/01-introduction.md
+    contentPath: 01-introduction.md
   - title: Understanding model interactions
-    contentPath: .labspace/02-understanding-model-interactions.md
+    contentPath: 02-understanding-model-interactions.md
   - title: The Docker Model Runner
-    contentPath: .labspace/03-the-docker-model-runner.md
+    contentPath: 03-the-docker-model-runner.md
   - title: Understanding tools and MCP
-    contentPath: .labspace/04-understanding-tools-and-mcp.md
+    contentPath: 04-understanding-tools-and-mcp.md
   - title: The Docker MCP Gateway
-    contentPath: .labspace/05-the-docker-mcp-gateway.md
+    contentPath: 05-the-docker-mcp-gateway.md
   - title: Putting it all together
-    contentPath: .labspace/06-putting-it-all-together.md
+    contentPath: 06-putting-it-all-together.md
   - title: Conclusion
-    contentPath: .labspace/07-conclusion.md
+    contentPath: 07-conclusion.md
+
+services:
+  - id: chatbot
+    title: Visual chatbot
+    url: http://localhost:3050
+    icon: chat
+  - id: MCP Inspector
+    title: MCP Inspector
+    url: http://localhost:6274
+    icon: find_in_page
