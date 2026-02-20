@@ -26,3 +26,5 @@ jobs:
         uses: dockersamples/publish-labspace-action@v2
         with:
           target_repo: ${{ env.DOCKERHUB_REPO }}
+          labspace_base_version: dev
+

@@ -177,11 +177,11 @@ You can get these information with Docker Desktop as well.
 
     It should open a window similar to the following, providing token usage and initial details of the request:
 
-    ![Screenshot of Docker Desktop's view of a recent request handled by the Docker Model Runner](.labspace/images/dd-dmr-request-view.png)
+    ![Screenshot of Docker Desktop's view of a recent request handled by the Docker Model Runner](images/dd-dmr-request-view.png)
 
 4. Click on the **Request** tab to view the entire request received by the Docker Model Runner, including the list of messages that are forwarded to the model.
 
-    ![Screenshot of the request details for a Docker Model Runner request](.labspace/images/dd-dmr-request-details.png)
+    ![Screenshot of the request details for a Docker Model Runner request](images/dd-dmr-request-details.png)
 
 And with that, you've learned a little bit about models, how they work, and how to use the Docker Model Runner in a simple application.
 

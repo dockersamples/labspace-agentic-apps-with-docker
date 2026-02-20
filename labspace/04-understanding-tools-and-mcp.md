@@ -80,7 +80,7 @@ Complete the following steps to see the tool execution flow in action.
 
     In the response, you should see a "Tool execution request". Click on the message to see the actual response that came from the model.
 
-    ![Capture of the tool execution request when requesting the current time](.labspace/images/dd-time-invocation-request.png)
+    ![Capture of the tool execution request when requesting the current time](images/dd-time-invocation-request.png)
 
     Remember that it is up to the client to actually invoke the tool, _not the model_.
 
@@ -88,7 +88,7 @@ Complete the following steps to see the tool execution flow in action.
 
     You should see a new message added to the stack with the current date and time. Clicking on it will show it has the type of `tool`, as well as the current time and an identifier to connect it to the tool invocation request.
 
-    ![Screenshot of the tool execution response](.labspace/images/dd-time-invocation-response.png)
+    ![Screenshot of the tool execution response](images/dd-time-invocation-response.png)
 
 7. Send the messages (which includes the tool execution response) by clicking the **Send messages to model**
 
