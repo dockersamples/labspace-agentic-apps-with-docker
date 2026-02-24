@@ -1,9 +1,9 @@
 import { Mastra } from '@mastra/core/mastra';
 import { PinoLogger } from '@mastra/loggers';
-import { jokeAgent } from './agent';
+import { websiteAnalyzer } from './agent';
 
 export const mastra = new Mastra({
-  agents: { jokeAgent },
+  agents: { websiteAnalyzer },
   logger: new PinoLogger({
     name: 'Mastra',
     level: 'info',

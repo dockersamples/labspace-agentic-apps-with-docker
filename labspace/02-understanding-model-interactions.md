@@ -61,7 +61,7 @@ The response from the API then contains a message that can be added back on the 
 
 Now that you've learned a little bit about the API, you can try crafting your own messages. First start by creating your own `user` messages and submitting them to a model.
 
-1. Open the Visual Chatbot app by opening :tabLink[http://localhost:3050]{href="http://localhost:3050" title="Visual Chatbot"}
+1. Open the Visual Chatbot app by opening :tabLink[http://localhost:3050]{id="chatbot" href="http://localhost:3050"}
 
     You'll see in the chat area a "system prompt", which sets the persona for the interaction with the model (more on this in the next section).
 

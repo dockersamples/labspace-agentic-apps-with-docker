@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Recent Event Comedian</title>
+    <title>Website Analyzer</title>
     <script src="https://cdn.jsdelivr.net/npm/showdown@2.1.0/dist/showdown.min.js"></script>
     <style>
         body { font-size: 18px; background-color: #f0f0f0; }
@@ -12,38 +12,38 @@
 </head>
 <body>
     <div id="content">
-        <h2>Recent Event Comedian</h2>
+        <h2>Website Analyzer</h2>
         <form id="inputForm">
-            <input type="text" placeholder="Location (e.g., New York City)" id="location-input" />
-            <input type="submit" value="Get a joke!" id="submit-button" />
+            <input type="text" placeholder="Enter website URL" id="url-input" />
+            <input type="submit" value="Analyze Website" id="submit-button" />
         </form>
-        <div id="output">Your joke will appear here. No guarantees it'll be any good...</div>
+        <div id="output">Your analysis will appear here...</div>
     </div>
 
     <script type="text/javascript">
         (function() {
             const converter = new showdown.Converter();
             document.getElementById("inputForm").addEventListener("submit", onSubmit);
-            const locationField = document.getElementById("location-input");
+            const urlField = document.getElementById("url-input");
             const submitButton = document.getElementById("submit-button");
             const outputArea = document.getElementById("output");
             
             function onSubmit(e) {
                 e.preventDefault();
     
-                const location = locationField.value;
-                location.disabled = true;
+                const url = urlField.value;
+                urlField.disabled = true;
                 submitButton.disabled = true;
 
-                outputArea.innerText = "Generating joke..."
+                outputArea.innerText = "Analyzing website..."
 
-                fetch("/joke?city=" + encodeURIComponent(location))
+                fetch("/analyze?url=" + encodeURIComponent(url))
                     .then((response) => response.json())
-                    .then(({ joke }) => {
-                        outputArea.innerHTML = converter.makeHtml(joke);
+                    .then(({ analysis }) => {
+                        outputArea.innerHTML = converter.makeHtml(analysis);
                     })
                     .finally(() => {
-                        location.disabled = false;
+                        urlField.disabled = false;
                         submitButton.disabled = false;
                     });
             }

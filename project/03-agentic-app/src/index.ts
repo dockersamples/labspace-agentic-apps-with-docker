@@ -13,20 +13,21 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/express/index.html");
 });
 
-app.get('/joke', async (req, res) => {
-  const { city } = req.query as { city?: string };
+app.get('/analyze', async (req, res) => {
+  const { url } = req.query as { url?: string };
  
-  if (!city) {
-    return res.status(400).send("Missing 'city' query parameter");
+  if (!url) {
+    return res.status(400).send("Missing 'url' query parameter");
   }
 
-  const agent = mastra.getAgent("jokeAgent");
+  const agent = mastra.getAgent("websiteAnalyzer");
 
   try {
-    const result = await agent.generate(`Tell me a joke about a recent event in ${city}`);
-    return res.json({ joke: result.text });
+    const result = await agent.generate(`Analyze the website at ${url}`);
+    return res.json({ analysis: result.text });
   } catch (error) {
-    console.error("Error generating joke:", error);
+    console.error("Error analyzing website:", error);
+    return res.status(500).send("Error analyzing website");
   }
 });
 

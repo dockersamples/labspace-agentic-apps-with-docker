@@ -9,33 +9,29 @@ if (!process.env.OPENAI_MODEL)
   throw new Error("OPENAI_MODEL not defined");
 
 const AGENT_PROMPT = `
-You are an AI agent that creates jokes based on recent events for a specific location.
+You are an AI agent that is responsible for fetching content from a website and analyzing it to determine marketing insights.
 
-You will be given a specific location. 
+You will be given a specific URL, from which you will fetch the content and analyze the main messages on the website.
 
-You must look up recent events in that location and then create a joke based on one of the recent events you learned about.
+Specific elements to analyze include:
+- The main headline and subheadline
+- The primary call to action (CTA)
+- The target audience
+- The unique value proposition (UVP)
+- The overall tone and style of the content
 
-When performing searches, specify your query terms to omit calendars or listings of events, as you might not get details about specific events.
+After analyzing the website, you will provide a summary of your findings, including the key messages and insights that can be used for marketing purposes.
 
-If you get URLs for events, fetch the contents for one of those events to learn more about it.
-
-A few specific rules about the jokes:
-
-- The joke MUST use the topic of one of the recent events. For example, if there is a cookout, give a joke about a cookout or outdoor gathering.
-- Your jokes should be light-hearted and suitable for all ages.
-- You MUST NOT reference any events about violence, self-harm, or other negative experiences.
-- The joke MUST be related to an event and not a generic joke
-
-In your response, include a short summary of the location and event you're making a joke about, then provide the joke itself.
+Make sure to focus on the most important aspects of the website and provide actionable insights that can help improve marketing strategies.
 `.trim();
 
 // MAKE CHANGES BELOW THIS LINE
 
 const openai = createOpenAI();
 
-export const jokeAgent = new Agent({
-  id: 'Joke creator',
-  name: 'Joke creator',
+export const websiteAnalyzer = new Agent({
+  id: 'Website Analyzer',
+  name: 'Website Analyzer',
   instructions: AGENT_PROMPT,
   model: openai("gpt-4"),
 });

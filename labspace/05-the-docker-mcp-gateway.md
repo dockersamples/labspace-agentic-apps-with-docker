@@ -17,7 +17,7 @@ The [Docker MCP Gateway](https://github.com/docker/mcp-gateway) provides the abi
 
 In this section, you're going to use the Docker MCP Gateway to launch the [DuckDuckGo MCP server](https://hub.docker.com/r/mcp/duckduckgo).
 
-1. Open the :tabLink[VS Code IDE]{href="http://localhost:8085" title="Workspace"} and a new terminal.
+1. Open the :tabLink[VS Code IDE]{id="ide" href="http://localhost:8085"} and a new terminal.
 
 2. In the workshop editor, open a new terminal and navigate to this directory:
 
@@ -28,17 +28,17 @@ In this section, you're going to use the Docker MCP Gateway to launch the [DuckD
 2. Start a MCP Gateway that will provide a basic time server using the following command:
 
     ```console terminal-id=02-tools
-    docker run -d --name=mcp-gateway --use-api-socket -p 8811:8811 docker/mcp-gateway --transport=streaming --servers=duckduckgo
+    docker run -d --name=mcp-gateway --use-api-socket -p 8811:8811 docker/mcp-gateway:v0.40.0 --transport=streaming --servers=duckduckgo
     ```
 
     To explain this command:
       
-    - **-d** - run the container in the background
-    - **--name=mcp-gateway** - give the new container a specific name (helpful for cleanup later on)
-    - **--use-api-socket** - this is a new flag that will mount the Docker socket and inject registry credentials into the container
-    - **docker/mcp-gateway** - the name of the container image to run
-    - **--transport=streaming** - configure the MCP Gateway to use the Streamable HTTP transport (MCP supports several communication transports)
-    - **--servers=duckduckgo** - the name of the MCP server to enable
+    - **`-d`** - run the container in the background
+    - **`--name=mcp-gateway`** - give the new container a specific name (helpful for cleanup later on)
+    - **`--use-api-socket`** - this is a new flag that will mount the Docker socket and inject registry credentials into the container
+    - **`docker/mcp-gateway:v0.40.0`** - the name of the container image to run
+    - **`--transport=streaming`** - configure the MCP Gateway to use the Streamable HTTP transport (MCP supports several communication transports)
+    - **`--servers=duckduckgo`** - the name of the MCP server to enable
 
 3. To see the log output, use the `docker logs` command:
 
@@ -49,16 +49,17 @@ In this section, you're going to use the Docker MCP Gateway to launch the [DuckD
     You should see output similar to the following:
     
     ```plaintext no-copy-button
+    Note: dynamic-tools disabled when using --servers flag
     - Reading configuration...
-      - Reading catalog from [https://desktop.docker.com/mcp/catalog/v2/catalog.yaml]
-    - Configuration read in 251.816333ms
+      - Reading catalog from [https://desktop.docker.com/mcp/catalog/v3/catalog.yaml]
+    - Configuration read in 240.187875ms
     - Using images:
       - mcp/duckduckgo@sha256:68eb20db6109f5c312a695fc5ec3386ad15d93ffb765a0b4eb1baf4328dec14f
-    > Images pulled in 15.757ms
+    > Images pulled in 61.136167ms
     - Those servers are enabled: duckduckgo
     - Listing MCP tools...
       - Running mcp/duckduckgo with [run --rm -i --init --security-opt no-new-privileges --cpus 1 --memory 2Gb --pull never -l docker-mcp=true -l docker-mcp-tool-type=mcp -l docker-mcp-name=duckduckgo -l docker-mcp-transport=stdio --network labspace]
-    - duckduckgo: [10/21/25 16:15:36] INFO     Processing request of type            server.py:523
+    - duckduckgo: [02/24/26 20:23:34] INFO     Processing request of type            server.py:523
     - duckduckgo:                              ListToolsRequest                                   
     - duckduckgo:                     INFO     Processing request of type            server.py:523
     - duckduckgo:                              ListPromptsRequest                                 
@@ -67,9 +68,11 @@ In this section, you're going to use the Docker MCP Gateway to launch the [DuckD
     - duckduckgo:                     INFO     Processing request of type            server.py:523
     - duckduckgo:                              ListResourceTemplatesRequest                       
       > duckduckgo: (2 tools)
-    > 2 tools listed in 698.074834ms
-    > Initialized in 969.858834ms
+    > 2 tools listed in 538.916ms
+    > Initialized in 844.491ms
     > Start streaming server on port 8811
+    > Gateway URL: http://localhost:8811/mcp
+    > Authentication disabled (running in container)
     ```
 
 4. With the MCP Gateway up and running, you can now connect to it and see what it provides. To do so, you can use the [MCP Inspector](https://github.com/modelcontextprotocol/inspector):
@@ -80,7 +83,7 @@ In this section, you're going to use the Docker MCP Gateway to launch the [DuckD
 
     After running this, you will be prompted by VS Code to open a browser tab. Simply click **Cancel** to close the dialog (the URL will go through a proxy that is configured to work).
 
-5. Once it's up and running, open the MCP Inspector by going to :tabLink[http://localhost:6274]{href="http://localhost:6274" title="MCP Inspector"}.
+5. Once it's up and running, open the MCP Inspector by going to :tabLink[http://localhost:6274]{href="http://localhost:6274" id="mcp-inspector"}.
 
 6. To connect to the MCP server, use the following configuration:
 
@@ -101,7 +104,7 @@ In this section, you're going to use the Docker MCP Gateway to launch the [DuckD
 
 9. Click the **Run Tool** button and see the tool run to get the page contents!
 
-10. When you're done, go back to the terminal running the `npx` command and hit `Ctrl+C` to stop the inspector.
+10. When you're done, go back to :tabLink[the IDE]{href="http://localhost:8050" id="ide"} and stop the `npx` command by hitting `Ctrl+C`.
 
 > [!IMPORTANT]
 > If you open the containers tab on Docker Desktop, you'll notice a container start when you run a tool. The Docker MCP Gateway manages the lifecycle of the containerized MCP servers, running them only when they need to run.
@@ -213,7 +216,7 @@ Now that you have a MCP Gateway up and running, you are ready to connect to it, 
     ```
     
     ```plaintext no-copy-button
-    The first 100 characters of the Docker homepage are: Docker: Accelerated Container Application Development NEW Webinar series – Secure your software supp...
+    The first 100 characters of the Docker homepage are: Docker: Accelerated Container Application Development A safer container ecosystem, for everyone Free...
     ```
 
 ## Clean-up
@@ -226,16 +229,6 @@ Hooray! You've completed this hands-on. Before moving on, do the following to cl
     ```console terminal-id=02-tools
     docker rm -f mcp-gateway
     ```
-
-
-## Recap
-
-In this hands-on, you accomplished the following:
-
-- Learned how tools and MCP servers operate
-- Gained familiarity with using the Docker MCP Gateway
-- Connected, listed tools, and ran a tool using MCP SDKs
-
 
 
 ## Additional resources

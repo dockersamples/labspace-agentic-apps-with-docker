@@ -34,12 +34,12 @@ Now that we understand how models work, how does Docker help you use models?
 
 The Docker Model Runner CLI commands are designed to look familiar to the other Docker CLI commands. Let's explore a few of them!
 
-1. Open the lab's VS Code editor on :tabLink[http://localhost:8085]{href="http://localhost:8085"}.
+1. Open the lab's VS Code editor on :tabLink[http://localhost:8085]{id="ide" href="http://localhost:8085"}.
 
 2. Pull a model by using the `docker model pull` command:
 
     ```console
-    docker model pull ai/gemma3:4B-Q4_K_M
+    docker model pull ai/llama3.2:3B-Q4_K_M
     ```
 
     This command should exit fairly quickly since the model was pulled when you started the lab environment.
@@ -49,28 +49,25 @@ The Docker Model Runner CLI commands are designed to look familiar to the other 
 3. To learn more details about a model, you can use the `docker model inspect` command:
 
     ```console
-    docker model inspect ai/gemma3:4B-Q4_K_M
+    docker model inspect ai/llama3.2:3B-Q4_K_M
     ```
 
     Running that will give you output similar to the following:
 
     ```json no-copy-button
     {
-        "id": "sha256:a353a8898c9d63b83254ad34ff8f3711d94e06dd412f1278c0ff0d9af27426f2",
+        "id": "sha256:436bb282b41968a83638482999980267ca8d7e8b5574604460efa9efff11cf59",
         "tags": [
-            "ai/gemma3:4B-Q4_K_M"
+            "ai/llama3.2",
+            "docker.io/ai/llama3.2:3B-Q4_K_M"
         ],
-        "created": 1758368217,
+        "created": 1742916473,
         "config": {
             "format": "gguf",
-            "quantization": "MOSTLY_Q4_K_M",
-            "parameters": "3.88 B",
-            "architecture": "gemma3",
-            "size": "2.31 GiB",
-            "gguf": {
-                "gemma3.attention.head_count": "8",
-                ...
-            }
+            "quantization": "IQ2_XXS/Q4_K_M",
+            "parameters": "3.21 B",
+            "architecture": "llama",
+            "size": "1.87 GiB"
         }
     }
     ```
@@ -80,7 +77,7 @@ The Docker Model Runner CLI commands are designed to look familiar to the other 
 4. To run a single query against the model, use the `docker model run` command:
 
     ```console
-    docker model run ai/gemma3:4B-Q4_K_M "Tell me an interesting fact"
+    docker model run ai/llama3.2:3B-Q4_K_M "Tell me an interesting fact"
     ```
 
     Once the model is loaded, you'll get a response!
@@ -164,7 +161,7 @@ You will now use the [openai](https://www.npmjs.com/package/openai) library to c
 You can get additional insights about the requests going into the Docker Model Runner for the specific model used by running this command:
 
 ```bash
-docker model requests ai/gemma3:4B-Q4_K_M | jq .
+docker model requests ai/llama3.2:3B-Q4_K_M | jq .
 ```
 
 You can get these information with Docker Desktop as well.

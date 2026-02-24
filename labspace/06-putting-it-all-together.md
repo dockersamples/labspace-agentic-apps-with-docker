@@ -12,7 +12,7 @@ Let's get started!
 
 ## The sample app
 
-The sample app you're going to create is an agent that creates jokes about recent events in a specific location. The agent will perform searches on recent events and then use them to generate a light-hearted joke.
+The sample app you're going to create is an agent that will load a web page and then do an analysis of the content to extract marketing messages, target audiences, and overall tone.
 
 The app will use the [Mastra](https://mastra.ai) agentic framework, which is a Typescript-based framework developed by Gatsby. It has many great features, including memory management, tool integration, and workflow execution. The Mastra agents will be exposed through a lightweight Express server.
 
@@ -28,8 +28,8 @@ The first thing you'll do is create a Compose file that defines the model and MC
 
     ```yaml
     models:
-      gemma3:
-        model: ai/gemma3:4B-Q4_K_M
+      llama3:
+        model: ai/llama3.2:3B-Q4_K_M
         context_size: 65000 # ~4 GB VRAM
     ```
 
@@ -38,9 +38,14 @@ The first thing you'll do is create a Compose file that defines the model and MC
     ```yaml
     services:
       mcp-gateway:
-        image: docker/mcp-gateway
-        command: --transport=streaming --servers=duckduckgo
+        image: docker/mcp-gateway:v0.40.0
+        command: --transport=streaming --servers=fetch
         use_api_socket: true
+        healthcheck:
+          test: ["CMD", "wget", "http://localhost:8811/health", "-O", "-"]
+          interval: 10s
+          start_period: 10s
+          retries: 5
     ```
 
 4. Finally, add a service for the custom app. This config will tell Docker to build a container image and connect it to the model and MCP gateway:
@@ -52,7 +57,7 @@ The first thing you'll do is create a Compose file that defines the model and MC
           context: ./
           target: dev
         models:
-          gemma3:
+          llama3:
             endpoint_var: OPENAI_BASE_URL
             model_var: OPENAI_MODEL
         ports:
@@ -61,6 +66,9 @@ The first thing you'll do is create a Compose file that defines the model and MC
         environment:
           MCP_GATEWAY_URL: http://mcp-gateway:8811/mcp
           OPENAI_API_KEY: "not-required"
+        depends_on:
+          mcp-gateway:
+            condition: service_healthy
         develop:
           watch:
             - path: ./src
@@ -76,22 +84,27 @@ The first thing you'll do is create a Compose file that defines the model and MC
 
     ```yaml save-as=03-agentic-app/compose.yaml
     models:
-      gemma3:
-        model: ai/gemma3:4B-Q4_K_M
+      llama3:
+        model: ai/llama3.2:3B-Q4_K_M
         context_size: 65000 # ~4 GB VRAM
 
     services:
       mcp-gateway:
         image: docker/mcp-gateway
-        command: --transport=streaming --servers=duckduckgo
+        command: --transport=streaming --servers=fetch
         use_api_socket: true
+        healthcheck:
+          test: ["CMD", "wget", "http://localhost:8811/health", "-O", "-"]
+          interval: 10s
+          start_period: 10s
+          retries: 5
 
       app: 
         build:
           context: ./
           target: dev
         models:
-          gemma3:
+          llama3:
             endpoint_var: OPENAI_BASE_URL
             model_var: OPENAI_MODEL
         ports:
@@ -100,6 +113,9 @@ The first thing you'll do is create a Compose file that defines the model and MC
         environment:
           MCP_GATEWAY_URL: http://mcp-gateway:8811/mcp
           OPENAI_API_KEY: "not-required"
+        depends_on:
+          mcp-gateway:
+            condition: service_healthy
         develop:
           watch:
             - path: ./src
@@ -123,7 +139,7 @@ The first thing you'll do is create a Compose file that defines the model and MC
 
     The `--watch` flag will start Compose Watch, which will be used to sync files into the container as we make changes.
 
-    Within a moment, everything will be up and running and you can now access your app using :tabLink[http://localhost:3080]{href="http://localhost:3080" title="Agentic app"}
+    Within a moment, everything will be up and running and you can now access your app using :tabLink[http://localhost:3080]{href="http://localhost:3080" title="Agentic app" id="app" icon="page"}
 
 If you try to use the app, you'll see that it doesn't work... yet. While the app has some basic plumbing in place, it needs to be updated to connect to the models and tools.
 
@@ -132,7 +148,7 @@ If you try to use the app, you'll see that it doesn't work... yet. While the app
 
 As you saw in the Compose file, the `OPENAI_BASE_URL`, `OPENAI_MODEL`, and `MCP_GATEWAY_URL` environment variables are being defined. The app simply needs to be updated to use them.
 
-1. Open the :fileLink[`src/mastra/agent.ts`]{path="03-agentic-app/src/mastra/agent.ts"} file. This is where the agent is being defined.
+1. Open the :fileLink[`src/mastra/agent.ts`]{path="03-agentic-app/src/mastra/agent.ts" line=34} file. This is where the agent is being defined.
 
 2. After the prompt definition, add the following to configure the OpenAI client to connect to the Docker Model Runner:
 
@@ -165,39 +181,33 @@ As you saw in the Compose file, the `OPENAI_BASE_URL`, `OPENAI_MODEL`, and `MCP_
 4. Finally, update the agent to use the model client and tools. Update the `model` and add the `tools` configuration to make the code look like this:
 
     ```javascript
-    export const jokeAgent = new Agent({
-      id: 'Joke creator',
-      name: "Joke creator",
+    export const websiteAnalyzer = new Agent({
+      id: 'Website Analyzer',
+      name: 'Website Analyzer',
       instructions: AGENT_PROMPT,
       model: openai.chat(process.env.OPENAI_MODEL || "gpt-4"),
       tools: await mcp.listTools(),
     });
     ```
 
-5. Go back to :tabLink[http://localhost:3080]{href="http://localhost:3080" title="Agentic app"} and give it a try now!
+5. Go back to :tabLink[http://localhost:3080]{href="http://localhost:3080" title="Agentic app" id="app"} and give it a try now!
 
     The app should work! You should see a new joke get generated and the MCP Gateway executions in the log output.
+
+    > [!NOTE]
+    > If attempts to use the app fail, it's likely due to the model choice. This lab is purposely using a smaller/lighter model to work on as many machines as possible. However, smaller models don't operate as intended all the time.
 
 If you'd like, feel free to make changes to the agent's prompt to change how it operates.
 
 > [!IMPORTANT]
-> One incredible feature of the Mastra framework is the Mastra Studio. With this Studio, you can interact with the agent directly, test prompts, make changes, and more. Access it in this lab by going to :tabLink[http://localhost:4111]{href="http://localhost:4111" title="Mastra Studio"}.
+> One incredible feature of the Mastra framework is the Mastra Studio. With this Studio, you can interact with the agent directly, test prompts, make changes, and more. Access it in this lab by going to :tabLink[http://localhost:4111]{href="http://localhost:4111" title="Mastra Studio" icon="smart_toy"}.
 
 
 ## Cleaning up
 
 When you're done with this hands-on, complete these steps to stop everything that's running:
 
-1. In the terminal running Compose, press `Ctrl+C` to stop the stack. You should see everything stop and tear down.
-
-
-## Recap
-
-In this hands-on, you accomplished the following:
-
-- Learned how to write a Compose file that specifies the required models and tools for a project
-- Updated code to connect to the model and tools provided by the Compose stack
-
+1. In the terminal running Compose, press `Ctrl+C` to stop the Compose stack. You should see everything stop and tear down.
 
 
 ## Additional resources

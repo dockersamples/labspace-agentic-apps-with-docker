@@ -28,7 +28,7 @@ services:
     title: Visual chatbot
     url: http://localhost:3050
     icon: chat
-  - id: MCP Inspector
+  - id: mcp-inspector
     title: MCP Inspector
     url: http://localhost:6274
     icon: find_in_page
